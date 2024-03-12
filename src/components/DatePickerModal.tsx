@@ -3,18 +3,19 @@ import DatePicker from "react-datepicker";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { checkDayAdd } from "../utils/event";
-const DatePickerModal = ({
+interface DatePickerModalProps {
+  open: boolean;
+  onCancel: () => void;
+  selectedView: string;
+  getTargetDayFromDatepicker: (target: Date) => void;
+  targetDay: any;
+}
+const DatePickerModal: React.FC<DatePickerModalProps> = ({
   open,
   onCancel,
   selectedView,
   getTargetDayFromDatepicker,
   targetDay,
-}: {
-  open: boolean;
-  onCancel: () => void;
-  selectedView: string;
-  getTargetDayFromDatepicker: (target: Date) => void;
-  targetDay: Date;
 }) => {
   const [dateRange, setDateRange] = useState<{
     startDate: Date;
@@ -23,16 +24,16 @@ const DatePickerModal = ({
     startDate: new Date(),
     endDate: null,
   });
-  const handleDate = (dates, isTargetDay) => {
-    const startDay = [
+  const handleDate = (dates) => {
+    const isDayView = [
       "timeGridDay",
       "timeGridThreeDays",
       "timeGridFourDays",
-    ].includes(selectedView)
-      ? dayjs(
-          isTargetDay || selectedView === "timeGridDay" ? dates : [...dates][0]
-        ).toDate()
-      : dayjs(isTargetDay ? dates : [...dates][0])
+    ].includes(selectedView);
+    const value = Array.isArray(dates) ? dates : [dates];
+    const startDay = isDayView
+      ? dayjs([...value][0]).toDate()
+      : dayjs([...value][0])
           .startOf("week")
           .toDate();
     const endDay = dayjs(startDay)
@@ -41,13 +42,13 @@ const DatePickerModal = ({
     getTargetDayFromDatepicker(startDay);
     setDateRange({ startDate: startDay, endDate: endDay });
   };
-  const onChange = (dates: any) => {
-    handleDate(dates, false);
+  const handleOnChange = (dates: any) => {
+    handleDate(dates);
   };
 
   useEffect(() => {
-    handleDate(targetDay, true);
-  }, [selectedView, targetDay]);
+    if (open) handleDate(targetDay);
+  }, [open]);
   return (
     <Modal
       open={open}
@@ -56,10 +57,11 @@ const DatePickerModal = ({
       closeIcon={null}
       maskClosable
       onCancel={onCancel}
+      width={"fit-content"}
     >
       <div className="modal-wrapper">
         <DatePicker
-          onChange={(v) => onChange(v)}
+          onChange={handleOnChange}
           startDate={dateRange.startDate}
           endDate={dateRange.endDate}
           selectsRange={selectedView !== "timeGridDay"}

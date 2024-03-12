@@ -75,16 +75,56 @@ a {
 #__next {
   isolation: isolate;
 }
-.ant-picker-range-separator{
+.ant-picker-range-separator {
   display: none;
 }
 .ant-picker .ant-picker-input:last-child {
   display: none;
 }
 .ant-modal {
-  left: -400px;
   top: 60px;
+  margin: 0;
+  left: 50px;
+  height: max-content;
 }
 .ant-modal-root .ant-modal-mask {
+  background-color: transparent;
+}
+.fc-event-main {
+  overflow: hidden;
+  padding: 0;
+}
+.drop-outside {
+  border: 1px solid #000;
+}
+.drop-outside .fc-event {
+  text-align: left;
+  border: solid 1px red;
+  margin: 10px;
+  padding-left: 10px;
+  cursor: pointer;
+}
+.ant-modal-content {
+  padding: 0 !important;
+}
+.fc-v-event {
+  border: none;
+}
+.fc-timegrid-event .fc-event-main {
+  padding: 0;
+}
+.fc-day-today {
+  background: #fff !important;
+}
+.fc-v-event {
+  background-color: transparent;
+}
+.fc-event-dragging {
+  background-color: #3788d8;
+}
+.react-datepicker__day--in-range {
+  background-color: #216ba5 !important;
+}
+.ant-modal-body .react-datepicker__day--keyboard-selected {
   background-color: transparent;
 }
